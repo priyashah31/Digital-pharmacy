@@ -1,0 +1,66 @@
+<%- include('../includes/header.ejs') %>
+		<title>Medi-life Store</title>
+		<link rel="stylesheet" type="text/css" href="css/listOfMedicines.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	</head>
+	<body>
+		<%- include("../includes/navBar.ejs") %>
+			<main>
+				<h3>
+					<% if (error) { %>
+					<%= error %>
+					<% } %>
+				</h3>
+				<% if (!isAdmin) {%>
+					<!-- <img src="images/image1.PNG" alt="how to" style="clear:right;"> -->
+					<div class="div1">
+						<p> Please add items to proceed</p>
+						<button type="button" class="btn btn-primary btn-md" id="button" ><a href='/cart' style="text-decoration:none; color:white;">View Cart</a></button>
+						<img src="images/image1.png" style="height:450px;width:400px;top:100px;margin-top: 60px;margin-right: -300px;"/>
+					</div>
+				<% } %>
+				<% if (length > 0) { %>
+					<div>
+						<% for (let medicine of medicines) { %>
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title"><%= medicine.name %></h5>
+									<p class="number"><%= medicine.capacity %> capsules in a strip</p>
+									<p class="number">₹<%= medicine.price %>*</p>
+									<p class="estimated">* Estimated price</p>
+									<% if (isAdmin) { %>
+										<button type="button" class="btn btn-primary btn-md" id="button2"><a href="/admin/medicine/<%= medicine.id %>?edit=true" style="text-decoration:none; color:white;">Edit Item</a></button>
+										<button type="button" class="btn btn-primary btn-md" id="button3"><a href="/admin/delete-medicine/<%= medicine.id %>"style="text-decoration:none; color:white;">Delete Item</a></button>
+									<% } else { %>
+										<% if(medicine.userId && isAuthenticated == medicine.userId.username) {%>
+											<p class="estimated"><button type="button" class="btn btn-primary btn-md" id="button2" ><a href="/delete-from-cart/<%= medicine.id %>" style="text-decoration:none; color:white;">Remove From Cart</a></button></p>
+										<% } else { %>
+											<p class="estimated"><button type="button" class="btn btn-primary btn-md" id="button1" ><a href="/add-to-cart/<%= medicine.id %>" style="text-decoration:none; color:white;">Add To Cart</a></button></p>
+										<% } %>
+									<% } %>
+								</div>
+							</div>
+						<% } %>
+						<input type="hidden" name="" id="medId" value="">
+					
+						</div>
+					<!-- <div>
+						<% if(currPageNo == 1) { %>
+							<% if (prevPageNo !== currPageNo && currPageNo!== nextPageNo ) { %><a href="?page=<%=currPageNo%>"><%=currPageNo%></a><% } %>
+							<% if (hasNextPage) { %><a href="?page=<%=nextPageNo%>"><%=nextPageNo%></a><% } %>
+							<% if (hasNextNextPage) { %><a href="?page=<%=nextNextPageNo%>"><%=nextNextPageNo%></a><% } %>
+						<% } else if( currPageNo == lastPageNo) { %>
+							<% if (hasPrevPrevPage) { %><a href="?page=<%=prevPrevPageNo%>"><%=prevPrevPageNo%></a><% } %>
+							<% if (hasPrevPage) { %><a href="?page=<%=prevPageNo%>"><%=prevPageNo%></a><% } %>
+							<% if (prevPageNo !== currPageNo && currPageNo!== nextPageNo ) { %><a href="?page=<%=currPageNo%>"><%=currPageNo%></a><% } %>
+						<% } else { %>
+							<% if (hasPrevPage) { %><a href="?page=<%=prevPageNo%>"><%=prevPageNo%></a><% } %>
+							<% if (prevPageNo !== currPageNo && currPageNo!== nextPageNo ) { %><a href="?page=<%=currPageNo%>"><%=currPageNo%></a><% } %>
+							<% if (hasNextPage) { %><a href="?page=<%=nextPageNo%>"><%=nextPageNo%></a><% } %>
+						<% } %>
+					</div> -->
+				<% } else { %>
+					<h3>No Items Available!</h3>
+				<% } %>
+			</main>
+	<%- include("../includes/footer.ejs") %>
